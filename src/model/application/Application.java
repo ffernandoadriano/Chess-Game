@@ -1,9 +1,11 @@
 package model.application;
 
-import model.boardgame.Board;
+import model.chess.ChessMatch;
 
 public class Application {
     public static void main(String[] args) {
-        Board board = new Board(8, 8);
+        ChessMatch chessMatch = new ChessMatch();
+        UI.printBoard(chessMatch.getPieces()); //User Interface - UI
+
     }
 }
