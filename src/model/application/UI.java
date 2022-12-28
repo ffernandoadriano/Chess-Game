@@ -4,7 +4,6 @@ import model.chess.ChessPiece;
 
 public final class UI {
     private UI() {
-
     }
 
     public static void printBoard(ChessPiece[][] chessPieces) {
