@@ -2,7 +2,6 @@ package model.chess;
 
 import model.boardgame.Board;
 import model.boardgame.BoardException;
-import model.boardgame.Position;
 import model.chess.pieces.King;
 import model.chess.pieces.Rook;
 
@@ -10,7 +9,7 @@ public class ChessMatch {
 
     private Board board;
 
-    public ChessMatch() throws BoardException {
+    public ChessMatch() throws BoardException, ChessException {
         board = new Board(8, 8);
         initialSetup();
     }
@@ -27,10 +26,14 @@ public class ChessMatch {
         return auxMatrix;
     }
 
-    private void initialSetup() throws BoardException {
-        board.placePiece(new Rook(board, Color.WRITE), new Position(2, 1));
-        board.placePiece(new King(board, Color.BLACK), new Position(0, 4));
-        board.placePiece(new King(board, Color.WRITE), new Position(7, 4));
+    private void placeNewPiece(char column,int row, ChessPiece piece) throws ChessException, BoardException {
+        board.placePiece(piece, new ChessPosition(column, row).toPosition());
+    }
+
+    private void initialSetup() throws BoardException, ChessException {
+        placeNewPiece('b', 6, new Rook(board, Color.WRITE));
+        placeNewPiece('e', 8, new King(board, Color.BLACK));
+        placeNewPiece('e', 1, new King(board, Color.BLACK));
     }
 
 }
