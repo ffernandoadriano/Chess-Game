@@ -1,6 +1,7 @@
 package model.application;
 
 import model.boardgame.BoardException;
+import model.chess.ChessException;
 import model.chess.ChessMatch;
 import model.chess.ChessPiece;
 import model.chess.ChessPosition;
@@ -16,6 +17,7 @@ public class Application {
             ChessMatch chessMatch = new ChessMatch();
             while (true) {
                 try {
+                    UI.clearScreen();
                     UI.printBoard(chessMatch.getPieces()); //User Interface - UI
                     System.out.println();
 
@@ -27,8 +29,9 @@ public class Application {
 
                     ChessPiece capturePiece = chessMatch.performChessMove(source, target);
 
-                } catch (BoardException | InputMismatchException e) {
+                } catch (ChessException | InputMismatchException e) {
                     System.out.println(e.getMessage());
+                    sc.nextLine();
                 }
             }
         } catch (BoardException e) {
