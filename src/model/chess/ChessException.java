@@ -1,6 +1,8 @@
 package model.chess;
 
-public class ChessException extends Exception {
+import model.boardgame.BoardException;
+
+public class ChessException extends BoardException {
     public ChessException(String message) {
         super(message);
     }

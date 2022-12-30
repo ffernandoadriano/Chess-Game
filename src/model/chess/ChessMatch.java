@@ -2,6 +2,8 @@ package model.chess;
 
 import model.boardgame.Board;
 import model.boardgame.BoardException;
+import model.boardgame.Piece;
+import model.boardgame.Position;
 import model.chess.pieces.King;
 import model.chess.pieces.Rook;
 
@@ -9,7 +11,7 @@ public class ChessMatch {
 
     private Board board;
 
-    public ChessMatch() throws BoardException, ChessException {
+    public ChessMatch() throws BoardException {
         board = new Board(8, 8);
         initialSetup();
     }
@@ -26,7 +28,31 @@ public class ChessMatch {
         return auxMatrix;
     }
 
-    private void placeNewPiece(char column,int row, ChessPiece piece) throws ChessException, BoardException {
+    public ChessPiece performChessMove(ChessPosition sourcePosition, ChessPosition targetPosition) throws BoardException {
+        Position source = sourcePosition.toPosition();
+        Position target = targetPosition.toPosition();
+        validateSourcePosition(source);
+        Piece capturePiece = makeMove(source, target);
+
+        return (ChessPiece) capturePiece;
+    }
+
+    private void validateSourcePosition(Position source) throws BoardException {
+        if (!board.thereIsAPiece(source)) {
+            throw new ChessException("There is no piece on source position");
+        }
+    }
+
+    private Piece makeMove(Position source, Position target) throws BoardException {
+        Piece piece = board.removePiece(source);
+        Piece capturePiece = board.removePiece(target);
+        board.placePiece(piece, target);
+
+        return capturePiece;
+    }
+
+
+    private void placeNewPiece(char column, int row, ChessPiece piece) throws BoardException {
         board.placePiece(piece, new ChessPosition(column, row).toPosition());
     }
 
