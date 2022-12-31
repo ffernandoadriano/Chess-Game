@@ -12,16 +12,17 @@ public abstract class Piece {
         return board;
     }
 
-    public abstract boolean[][] possibleMoves();
+    public abstract boolean[][] possibleMoves() throws BoardException;
 
 
     //** Hook Methods **
     //https://pt.coursera.org/lecture/desenvolvimento-agil-com-padroes-de-projeto/hook-methods-9VqFy
-    public boolean possibleMove(Position position) {
+    public boolean possibleMove(Position position) throws BoardException {
         return possibleMoves()[position.getRow()][position.getColumn()];
     }
 
-    public boolean isThereAnyPossibleMove() {
+    //** Hook Methods **
+    public boolean isThereAnyPossibleMove() throws BoardException {
         boolean[][] auxMatrix = possibleMoves();
 
         for (int i = 0; i < auxMatrix.length; i++) {
