@@ -9,11 +9,24 @@ import model.chess.pieces.Rook;
 
 public class ChessMatch {
 
-    private Board board;
+    private int turn;
+    private Color currentPlayer;
+
+    private Board board; // association
 
     public ChessMatch() throws BoardException {
         board = new Board(8, 8);
+        turn = 1;
+        currentPlayer = Color.WRITE;
         initialSetup();
+    }
+
+    public int getTurn() {
+        return turn;
+    }
+
+    public Color getCurrentPlayer() {
+        return currentPlayer;
     }
 
     public ChessPiece[][] getPieces() throws BoardException {
@@ -40,13 +53,17 @@ public class ChessMatch {
         validateSourcePosition(source);
         validateTargetPosition(source, target);
         Piece capturePiece = makeMove(source, target);
-
+        nextTurn();
         return (ChessPiece) capturePiece;
     }
 
     private void validateSourcePosition(Position sourcePosition) throws BoardException {
         if (!board.thereIsAPiece(sourcePosition)) {
             throw new ChessException("There is no piece on source position");
+        }
+
+        if (currentPlayer != ((ChessPiece) board.piece(sourcePosition)).getColor()) {
+            throw new ChessException("The chosen piece is not yours");
         }
 
         if (!board.piece(sourcePosition).isThereAnyPossibleMove()) {
@@ -64,8 +81,12 @@ public class ChessMatch {
         Piece piece = board.removePiece(source);
         Piece capturePiece = board.removePiece(target);
         board.placePiece(piece, target);
-
         return capturePiece;
+    }
+
+    private void nextTurn() {
+        currentPlayer = (currentPlayer == Color.WRITE) ? Color.BLACK : Color.WRITE;
+        turn++;
     }
 
 
@@ -73,7 +94,7 @@ public class ChessMatch {
         board.placePiece(piece, new ChessPosition(column, row).toPosition());
     }
 
-    private void initialSetup() throws BoardException, ChessException {
+    private void initialSetup() throws BoardException {
         placeNewPiece('c', 1, new Rook(board, Color.WRITE));
         placeNewPiece('c', 2, new Rook(board, Color.WRITE));
         placeNewPiece('d', 2, new Rook(board, Color.WRITE));
