@@ -6,19 +6,22 @@ import model.chess.ChessMatch;
 import model.chess.ChessPiece;
 import model.chess.ChessPosition;
 
+import java.util.ArrayList;
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
 
 public class Application {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
+        List<ChessPiece> capturedPieceList = new ArrayList<>();
 
         try {
             ChessMatch chessMatch = new ChessMatch();
             while (true) {
                 try {
                     UI.clearScreen();
-                    UI.printMatch(chessMatch); //User Interface - UI
+                    UI.printMatch(chessMatch, capturedPieceList); //User Interface - UI
                     System.out.println();
 
                     System.out.print("Source: ");
@@ -33,6 +36,10 @@ public class Application {
                     ChessPosition target = UI.readChessPosition(sc);
 
                     ChessPiece capturePiece = chessMatch.performChessMove(source, target);
+
+                    if (capturePiece != null) {
+                        capturedPieceList.add(capturePiece);
+                    }
 
                 } catch (ChessException | InputMismatchException e) {
                     System.out.println(e.getMessage());

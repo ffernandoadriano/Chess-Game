@@ -7,12 +7,17 @@ import model.boardgame.Position;
 import model.chess.pieces.King;
 import model.chess.pieces.Rook;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ChessMatch {
 
     private int turn;
     private Color currentPlayer;
 
     private Board board; // association
+    private List<Piece> piecesOnTheBoard = new ArrayList<>();
+    private List<Piece> capturedPieces = new ArrayList<>();
 
     public ChessMatch() throws BoardException {
         board = new Board(8, 8);
@@ -81,6 +86,12 @@ public class ChessMatch {
         Piece piece = board.removePiece(source);
         Piece capturePiece = board.removePiece(target);
         board.placePiece(piece, target);
+
+        if (capturePiece != null) {
+            piecesOnTheBoard.remove(capturedPieces);
+            capturedPieces.add(capturePiece);
+        }
+
         return capturePiece;
     }
 
@@ -92,6 +103,7 @@ public class ChessMatch {
 
     private void placeNewPiece(char column, int row, ChessPiece piece) throws BoardException {
         board.placePiece(piece, new ChessPosition(column, row).toPosition());
+        piecesOnTheBoard.add(piece);
     }
 
     private void initialSetup() throws BoardException {
