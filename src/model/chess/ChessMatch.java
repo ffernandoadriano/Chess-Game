@@ -15,6 +15,7 @@ public class ChessMatch {
     private int turn;
     private Color currentPlayer;
     private boolean check;
+    private boolean checkMate;
 
     private final Board board; // association
     private final List<Piece> piecesOnTheBoardList = new ArrayList<>();
@@ -37,6 +38,10 @@ public class ChessMatch {
 
     public boolean isCheck() {
         return check;
+    }
+
+    public boolean isCheckMate() {
+        return checkMate;
     }
 
     public ChessPiece[][] getPieces() throws BoardException {
@@ -70,7 +75,11 @@ public class ChessMatch {
         }
 
         check = testCheck(opponent(currentPlayer));
-        nextTurn();
+
+        if (!testCheckmate(opponent(currentPlayer))) {
+            nextTurn();
+        }
+
         return (ChessPiece) capturePiece;
     }
 
@@ -149,7 +158,40 @@ public class ChessMatch {
                 return true;
             }
         }
+
         return false;
+    }
+
+    private boolean testCheckmate(Color color) throws BoardException {
+        if (!check) {
+            return false;
+        }
+
+        List<Piece> pieceList = piecesOnTheBoardList.stream().filter(x -> ((ChessPiece) x).getColor() == color).toList();
+
+        for (Piece piece : pieceList) {
+            boolean[][] auxMatrixPossibleMove = piece.possibleMoves();
+
+            for (int i = 0; i < auxMatrixPossibleMove.length; i++) {
+                for (int j = 0; j < auxMatrixPossibleMove[i].length; j++) {
+
+                    if (auxMatrixPossibleMove[i][j]) { // possible moment to protect the king
+                        Position source = ((ChessPiece) piece).getChessPosition().toPosition();
+                        Position target = new Position(i, j);
+                        Piece capturedPiece = makeMove(source, target);
+                        checkMate = testCheck(color);
+                        undoMove(source, target, capturedPiece);
+
+                        if (!checkMate) {
+                            return false;
+                        }
+
+                    }
+                }
+            }
+        }
+
+        return true;
     }
 
     private void placeNewPiece(char column, int row, ChessPiece piece) throws BoardException {
@@ -158,19 +200,12 @@ public class ChessMatch {
     }
 
     private void initialSetup() throws BoardException {
-        placeNewPiece('c', 1, new Rook(board, Color.WHITE));
-        placeNewPiece('c', 2, new Rook(board, Color.WHITE));
-        placeNewPiece('d', 2, new Rook(board, Color.WHITE));
-        placeNewPiece('e', 2, new Rook(board, Color.WHITE));
-        placeNewPiece('e', 1, new Rook(board, Color.WHITE));
-        placeNewPiece('d', 1, new King(board, Color.WHITE));
+        placeNewPiece('h', 7, new Rook(board, Color.WHITE));
+        placeNewPiece('d', 1, new Rook(board, Color.WHITE));
+        placeNewPiece('e', 1, new King(board, Color.WHITE));
 
-        placeNewPiece('c', 7, new Rook(board, Color.BLACK));
-        placeNewPiece('c', 8, new Rook(board, Color.BLACK));
-        placeNewPiece('d', 7, new Rook(board, Color.BLACK));
-        placeNewPiece('e', 7, new Rook(board, Color.BLACK));
-        placeNewPiece('e', 8, new Rook(board, Color.BLACK));
-        placeNewPiece('d', 8, new King(board, Color.BLACK));
+        placeNewPiece('b', 8, new Rook(board, Color.BLACK));
+        placeNewPiece('a', 8, new King(board, Color.BLACK));
     }
 
 }
