@@ -4,7 +4,7 @@ public class Board {
     private int rows;
     private int columns;
 
-    private Piece[][] pieces;
+    private Piece[][] pieces; // association
 
     public Board(int rows, int columns) throws BoardException {
         if (rows < 1 || columns < 1) {

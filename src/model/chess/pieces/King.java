@@ -27,16 +27,16 @@ public class King extends ChessPiece {
 
         Position auxPosition = new Position(0, 0);
 
-        auxPosition.setValue(position.getRow() - 1, position.getColumn());
+        auxPosition.setValues(position.getRow() - 1, position.getColumn());
 
         //Above
-        if (getBoard().positionExists(auxPosition) && canMove(auxPosition) || getBoard().piece(auxPosition) == null) {
+        if (getBoard().positionExists(auxPosition) && canMove(auxPosition)) {
             auxMatrix[auxPosition.getRow()][auxPosition.getColumn()] = true;
         }
 
 
         //Below
-        auxPosition.setValue(position.getRow() + 1, position.getColumn());
+        auxPosition.setValues(position.getRow() + 1, position.getColumn());
 
         if (getBoard().positionExists(auxPosition) && canMove(auxPosition)) {
             auxMatrix[auxPosition.getRow()][auxPosition.getColumn()] = true;
@@ -44,7 +44,7 @@ public class King extends ChessPiece {
 
 
         //Left
-        auxPosition.setValue(position.getRow(), position.getColumn() - 1);
+        auxPosition.setValues(position.getRow(), position.getColumn() - 1);
 
         if (getBoard().positionExists(auxPosition) && canMove(auxPosition)) {
             auxMatrix[auxPosition.getRow()][auxPosition.getColumn()] = true;
@@ -52,7 +52,7 @@ public class King extends ChessPiece {
 
 
         //Right
-        auxPosition.setValue(position.getRow(), position.getColumn() + 1);
+        auxPosition.setValues(position.getRow(), position.getColumn() + 1);
 
         if (getBoard().positionExists(auxPosition) && canMove(auxPosition)) {
             auxMatrix[auxPosition.getRow()][auxPosition.getColumn()] = true;
@@ -61,7 +61,7 @@ public class King extends ChessPiece {
 
 
         //Diagonal Above-Left
-        auxPosition.setValue(position.getRow() - 1, position.getColumn() - 1);
+        auxPosition.setValues(position.getRow() - 1, position.getColumn() - 1);
 
         if (getBoard().positionExists(auxPosition) && canMove(auxPosition)) {
             auxMatrix[auxPosition.getRow()][auxPosition.getColumn()] = true;
@@ -69,7 +69,7 @@ public class King extends ChessPiece {
 
 
         //Diagonal Above-Right
-        auxPosition.setValue(position.getRow() - 1, position.getColumn() + 1);
+        auxPosition.setValues(position.getRow() - 1, position.getColumn() + 1);
 
         if (getBoard().positionExists(auxPosition) && canMove(auxPosition)) {
             auxMatrix[auxPosition.getRow()][auxPosition.getColumn()] = true;
@@ -77,7 +77,7 @@ public class King extends ChessPiece {
 
 
         //Diagonal Below-Left
-        auxPosition.setValue(position.getRow() + 1, position.getColumn() - 1);
+        auxPosition.setValues(position.getRow() + 1, position.getColumn() - 1);
 
         if (getBoard().positionExists(auxPosition) && canMove(auxPosition)) {
             auxMatrix[auxPosition.getRow()][auxPosition.getColumn()] = true;
@@ -85,7 +85,7 @@ public class King extends ChessPiece {
 
 
         //Diagonal Above-Right
-        auxPosition.setValue(position.getRow() + 1, position.getColumn() + 1);
+        auxPosition.setValues(position.getRow() + 1, position.getColumn() + 1);
 
         if (getBoard().positionExists(auxPosition) && canMove(auxPosition)) {
             auxMatrix[auxPosition.getRow()][auxPosition.getColumn()] = true;
