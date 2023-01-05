@@ -3,13 +3,17 @@ package model.chess.pieces;
 import model.boardgame.Board;
 import model.boardgame.BoardException;
 import model.boardgame.Position;
+import model.chess.ChessMatch;
 import model.chess.ChessPiece;
 import model.chess.Color;
 
 public class Pawn extends ChessPiece {
 
-    public Pawn(Board board, Color color) {
+    private ChessMatch chessMatch; // association
+
+    public Pawn(Board board, Color color, ChessMatch chessMatch) {
         super(board, color);
+        this.chessMatch = chessMatch;
     }
 
     @Override
@@ -51,6 +55,25 @@ public class Pawn extends ChessPiece {
                 auxMatrix[auxPosition.getRow()][auxPosition.getColumn()] = true;
             }
 
+
+            // ## SpecialMove en passant ##
+            if (position.getRow() == 3) {
+                // Rule left side
+                Position left = new Position(position.getRow(), position.getColumn() - 1);
+
+                if (getBoard().positionExists(left) && isThereOpponentPiece(left) && getBoard().piece(left) == chessMatch.getEnPassantVulnerable()) {
+                    auxMatrix[left.getRow() - 1][left.getColumn()] = true;
+                }
+
+                // Rule right side
+                Position right = new Position(position.getRow(), position.getColumn() + 1);
+
+                if (getBoard().positionExists(right) && isThereOpponentPiece(right) && getBoard().piece(right) == chessMatch.getEnPassantVulnerable()) {
+                    auxMatrix[right.getRow() - 1][right.getColumn()] = true;
+                }
+            }
+
+
         } else {
             //Black piece rules
             auxPosition.setValues(position.getRow() + 2, position.getColumn());
@@ -76,6 +99,24 @@ public class Pawn extends ChessPiece {
             auxPosition.setValues(position.getRow() + 1, position.getColumn() + 1);
             if (getBoard().positionExists(auxPosition) && isThereOpponentPiece(auxPosition)) {
                 auxMatrix[auxPosition.getRow()][auxPosition.getColumn()] = true;
+            }
+
+
+            // ## SpecialMove en passant ##
+            if (position.getRow() == 4) {
+                // Rule left side
+                Position left = new Position(position.getRow(), position.getColumn() - 1);
+
+                if (getBoard().positionExists(left) && isThereOpponentPiece(left) && getBoard().piece(left) == chessMatch.getEnPassantVulnerable()) {
+                    auxMatrix[left.getRow() + 1][left.getColumn()] = true;
+                }
+
+                // Rule right side
+                Position right = new Position(position.getRow(), position.getColumn() + 1);
+
+                if (getBoard().positionExists(right) && isThereOpponentPiece(right) && getBoard().piece(right) == chessMatch.getEnPassantVulnerable()) {
+                    auxMatrix[right.getRow() + 1][right.getColumn()] = true;
+                }
             }
         }
 
