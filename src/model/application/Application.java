@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Application {
+    private static ChessPiece validation;
+
     public static void main(String[] args) throws BoardException {
         Scanner sc = new Scanner(System.in);
         List<ChessPiece> capturedPieceList = new ArrayList<>();
@@ -39,6 +41,21 @@ public class Application {
                 if (capturePiece != null) {
                     capturedPieceList.add(capturePiece);
                 }
+
+                validation = null;
+                if (chessMatch.getPromoted() != null) {
+                    while (validation == null) {
+                        try {
+                            System.out.print("Enter piece for promotion (B/N/R/Q): ");
+                            String type = sc.next();
+
+                            validation = chessMatch.replacePromotedPiece(type);
+                        } catch (RuntimeException e) {
+                            System.out.println(e.getMessage() + ", try again!");
+                        }
+                    }
+                }
+
 
             } catch (ChessException | InputMismatchException e) {
                 System.out.println(e.getMessage());
