@@ -45,7 +45,7 @@ public final class UI {
 
     public static ChessPosition readChessPosition(Scanner sc) throws ChessException {
         try {
-            String strPosition = sc.next();
+            String strPosition = sc.next().toLowerCase();
             char column = strPosition.charAt(0);
             int row = Integer.parseInt(strPosition.substring(1));
 
